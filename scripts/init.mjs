@@ -100,7 +100,7 @@ function* walk(dir) {
 }
 
 const changed = []
-for (const file of [...walk(path('src')), path('README.md')]) {
+for (const file of [...walk(path('src')), path('README.md'), path('ARCHITECTURE.md')]) {
   if (!existsSync(file)) continue
   const before = read(file)
   let after = before
@@ -113,6 +113,29 @@ for (const file of [...walk(path('src')), path('README.md')]) {
     write(file, after)
     changed.push(file.slice(root.length))
   }
+}
+
+// 5. CHANGELOG: app baru mulai kosong. Marker cuma ada di changelog bawaan starter,
+//    jadi menjalankan init lagi nggak akan menimpa changelog yang sudah lu isi.
+const changelogFile = path('CHANGELOG.md')
+if (existsSync(changelogFile) && read(changelogFile).includes('starter-changelog')) {
+  const today = new Date().toISOString().slice(0, 10)
+  write(
+    changelogFile,
+    `# Changelog
+
+Format mengikuti [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) dan [Semantic Versioning](https://semver.org/).
+
+## [Unreleased]
+
+## [${pkg.version}] - ${today}
+
+### Added
+
+- Rilis awal, dibuat dari starter-minimal.
+`
+  )
+  changed.push('CHANGELOG.md (direset)')
 }
 
 console.log(`\nSelesai.
