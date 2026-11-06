@@ -1,0 +1,10 @@
+node_modules
+out
+dist
+release
+.dev-data
+.DS_Store
+*.log
+.env
+
+.electron-cache
