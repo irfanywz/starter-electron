@@ -21,6 +21,7 @@ const yml = read(ymlFile)
 const oldName = pkg.name
 const oldProduct = pkg.productName
 const oldAppId = yml.match(/^appId:\s*(.+)$/m)?.[1].trim()
+const oldCopyright = yml.match(/^copyright:\s*"(.+)"$/m)?.[1]
 
 const slugify = (text) =>
   text
@@ -42,6 +43,7 @@ async function ask(rl, question, fallback, isValid, errorHint) {
 
 let product = process.argv[2]
 let appId = process.argv[3]
+let company = process.argv[4]
 
 if (!product) {
   const rl = createInterface({ input: process.stdin, output: process.stdout })
@@ -54,11 +56,13 @@ if (!product) {
   )
   const defaultAppId = `com.example.${slugify(product).replace(/-/g, '') || 'app'}`
   appId = await ask(rl, 'App ID', defaultAppId, validAppId, 'Format: com.namaku.app')
+  company = await ask(rl, 'Nama perusahaan (CompanyName di metadata exe)', 'Nama Perusahaan', (t) => t.length > 0 && t.length <= 80, 'Tidak boleh kosong')
   rl.close()
 }
 
 const slug = slugify(product)
 appId ??= `com.example.${slug.replace(/-/g, '')}`
+company ??= 'Nama Perusahaan'
 
 if (!validProduct(product) || !slug) {
   console.error('Nama app nggak valid (kosong / karakter terlarang \\ / : * ? " < > |).')
@@ -72,12 +76,17 @@ if (!validAppId(appId)) {
 // 1. package.json
 pkg.name = slug
 pkg.productName = product
+pkg.author = { name: company, email: pkg.author?.email ?? '' }
 write(pkgFile, JSON.stringify(pkg, null, 2) + '\n')
 
 // 2. electron-builder.yml
+const year = new Date().getFullYear()
 write(
   ymlFile,
-  yml.replace(/^appId:.*$/m, `appId: ${appId}`).replace(/^productName:.*$/m, `productName: ${product}`)
+  yml
+    .replace(/^appId:.*$/m, `appId: ${appId}`)
+    .replace(/^productName:.*$/m, `productName: ${product}`)
+    .replace(/^copyright:.*$/m, `copyright: "Copyright © ${year} ${company}"`)
 )
 
 // 3. package-lock.json (kalau sudah ada)
@@ -140,6 +149,7 @@ Format mengikuti [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) dan [S
 
 console.log(`\nSelesai.
   Nama     : ${product}  (package name: ${slug})
+  Company  : ${company}
   App ID   : ${appId}
   Exe      : ${product}.exe  ->  data di "${product}_Data/"
   Zip      : ${product} ${pkg.version}.zip

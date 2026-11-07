@@ -1,5 +1,9 @@
 appId: com.example.starterminimal
 productName: Starter Minimal
+# Metadata exe (Properties > Details di Windows)
+# ProductName = productName, FileDescription = description (package.json),
+# CompanyName = author.name (package.json), LegalCopyright = copyright di bawah
+copyright: "Copyright © 2026 Nama Perusahaan"
 directories:
   buildResources: build
   output: release

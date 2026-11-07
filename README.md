@@ -24,7 +24,7 @@ npm run format          # sekali aja
 npm run dev             # data dev disimpan di ./.dev-data
 ```
 
-`npm run init -- "Nama App" com.namaku.app` buat versi tanpa pertanyaan. Nama app dipakai buat nama exe dan folder data, jadi nggak boleh ada karakter `\ / : * ? " < > |`.
+`npm run init -- "Nama App" com.namaku.app "Nama Perusahaan"` buat versi tanpa pertanyaan. Nama perusahaan dipakai sebagai CompanyName dan Copyright di metadata exe. Nama app dipakai buat nama exe dan folder data, jadi nggak boleh ada karakter `\ / : * ? " < > |`.
 
 ## Perintah
 
@@ -36,6 +36,7 @@ npm run dev             # data dev disimpan di ./.dev-data
 | `npm run typecheck`               | Cek tipe saja                                                  |
 | `npm run lint` / `lint:fix`       | ESLint                                                         |
 | `npm run format` / `format:check` | Prettier                                                       |
+| `npm run release`                 | Sama dengan `dist:win`: build Windows, hasilnya zip di `release/` |
 | `npm run dist:win`                | `release/win-unpacked/` + `release/<Nama App> <versi>.zip`     |
 | `npm run dist:linux`              | `release/linux-unpacked/` + zip                                |
 

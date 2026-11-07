@@ -4,7 +4,10 @@
   "version": "0.1.0",
   "description": "Minimal Electron starter: tray, theme, router, toast, logging, portable unpacked build with data beside the exe",
   "main": "./out/main/index.js",
-  "author": "",
+  "author": {
+    "name": "Nama Perusahaan",
+    "email": ""
+  },
   "private": true,
   "scripts": {
     "init": "node scripts/init.mjs",
@@ -20,7 +23,8 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "dist:win": "npm run build && electron-builder --win && node scripts/zip.mjs win",
-    "dist:linux": "npm run build && electron-builder --linux && node scripts/zip.mjs linux"
+    "dist:linux": "npm run build && electron-builder --linux && node scripts/zip.mjs linux",
+    "release": "npm run dist:win"
   },
   "dependencies": {
     "electron-log": "^5.2.0"
